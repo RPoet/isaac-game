@@ -154,7 +154,7 @@ public:
 	int  getTag() { return this->tag; }
 	
 
-	void setHeathPoint(int hp) {
+	void setHealthPoint(int hp) {
 		this->health_point = hp;
 	}
 	void getHealthPoint(int& hp) {

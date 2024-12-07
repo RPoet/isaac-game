@@ -6,18 +6,18 @@
 #include "RPtimer.h"
 #include "explosion.h"
 #include "explosion_red_tear.h"
+
 const unsigned int kMaxAnimationFrame = 17;
 GLuint RedTear::tear_animation[17]{0,};
 bool RedTear::resource = false;
 int RedTear::sound_number[2];
+
 RedTear::RedTear(float degree):Object()
 {
 	if (!resource)	this->fetchImage();
 
 	this->current_frame_image = &this->tear_animation[0];
 	getSoundMGR()->PlaySoundW(this->sound_number[0], false, 0.5f);
-
-
 }
 
 
@@ -41,8 +41,7 @@ void RedTear::fetchImage()
 }
 
 void RedTear::update()
-{
-	
+{	
 	Object::update();
 	this->animate();
 }
@@ -67,17 +66,6 @@ void RedTear::animate()
 {
 	if (this->isBombed)
 	{
-		//this->animation_timer += RP::RpTimer::getDeltaTime();
-		//if (this->animation_timer > 0.05)
-		//{
-		//	if (this->animation_frame_number == 15) {
-		//		float x, y, z;
-		//		this->transform.getTransform(x, y, z);
-		//		this->onDelete();
-		//	}
-		//	this->animation_frame_number = (this->animation_frame_number + 1) % kMaxAnimationFrame;
-		//	this->animation_timer = 0;
-		//}
 		float x, y, z;
 		this->transform.getTransform(x, y, z);
 		float sx, sy, sz;
@@ -86,8 +74,6 @@ void RedTear::animate()
 		this->onDelete();
 		float vx, vy, vz;
 		this->getVelocity(vx, vy,vz);
-
-
 	}
 
 
@@ -97,7 +83,7 @@ void RedTear::animate()
 	this->getVelocity(vx, vy, vz);
 
 	getRenderer()->DrawParticle(
-		x*100.0f, y*100.0f, 0, 5.0f,
+		x * 1, y * 1, 0, 1,
 		1, 1, 1, 1,
 		-vx, -vy,
 		getSceneMGR()->snow_texture,

@@ -46,7 +46,7 @@ void HealthItem::onCollision(Object* other)
 		other->getHealthPoint(hp);
 
 		hp++;
-		other->setHeathPoint(hp);
+		other->setHealthPoint(hp);
 		getSoundMGR()->PlaySoundW(this->sound, false, 1.0f);
 	}
 }

@@ -165,19 +165,19 @@ void MainCharacter::definedKeyAct()
 	float Fy = 0;
 	float Fz = 0;
 	float amounts = 4;
-	if (KeyIO::KeyState(VK_RIGHT)) {
+	if (KeyIO::KeyState('D')) {
 		Fx = amounts;
 		this->dir = RIGHT;
 	}
-	if (KeyIO::KeyState(VK_LEFT)) {
+	if (KeyIO::KeyState('A')) {
 		Fx = -amounts;
 		this->dir = LEFT;
 	}
-	if (KeyIO::KeyState(VK_UP)) {
+	if (KeyIO::KeyState('W')) {
 		Fy = amounts;
 		this->dir = UP;
 	}
-	if (KeyIO::KeyState(VK_DOWN))
+	if (KeyIO::KeyState('S'))
 	{
 		Fy = -amounts;
 		this->dir = DOWN;
@@ -202,7 +202,7 @@ void MainCharacter::definedKeyAct()
 	if (KeyIO::KeyState('P'))// 公利
 	{
 		std::cout << "公利 悼累" << std::endl;
-		this->setHeathPoint(9999999999);
+		this->setHealthPoint(9999999999);
 		this->setColor(1, 0, 0, 1);
 	}
 

@@ -208,37 +208,6 @@ void SceneManager::renderScene()
 					RP::RpTimer::getPlayTime());
 				break;
 			}
-
-			//
-			//this->renderer->DrawTextureRectHeight(newX, newY - newH/1.45, 0.5,
-			//	newW  * 1, newH * 1,
-			//	r, g, b, a,
-			//	*this->poolOfObjects[SceneManager::current_scene_number][i]->getCurrentFrameImage(),
-			//	newZ
-			//);
-
-
-			//this->renderer->DrawSolidRectGauge(newX, newY - newH / 1.45, 0.5,
-			//	newW / 100 * 50, newH / 100 * 25,
-			//	r, g, b, a,
-			//	newZ,
-			//	0.5f // 게이지 차있는 계수
-			//);
-
-			//this->renderer->DrawTextureRectSeqXYHeight(newX, newY - newH / 1.45, 0.5,
-			//	newW  * 2, newH  *2,
-			//	r, g, b, a,
-			//	*this->poolOfObjects[SceneManager::current_scene_number][i]->getCurrentFrameImage(),0,0,
-			//	1,1,
-			//	newZ-15);
-
-			//this->renderer->DrawParticleClimate(0, 0, 0, 
-			//	5,//파티클 사이즈
-			//	1, 1, 1, 1,
-			//	sinf(RP::RpTimer::getPlayTime()), cosf(RP::RpTimer::getPlayTime()),		//파티클의 방향
-			//	this->snow_texture,
-			//	1.f,  // 파티클에 대한 비율
-			//	RP::RpTimer::getPlayTime());
 		}
 	}
 
@@ -325,7 +294,7 @@ void SceneManager::addObj(Object* obj, float x, float y, float z, float sx, floa
 	obj->setFrictionalCoef(1);
 	obj->setColor(1, 1, 1, 1);
 	obj->setTag(kind);
-	obj->setHeathPoint(hp);
+	obj->setHealthPoint(hp);
 
 	this->poolOfObjects[sceneNum][slotnum] = obj;
 }
