@@ -20,9 +20,9 @@ int MainCharacter::sound_hit;
 
 
 bool MainCharacter::image = false;
-MainCharacter* MainCharacter::instance = nullptr;
+MainCharacter* MainCharacter::instances[2] = { nullptr, nullptr };
 
-MainCharacter::MainCharacter() :Object()
+MainCharacter::MainCharacter(int playerIndex) : Object() , playerIndex(playerIndex)
 {
 	if(!MainCharacter::image)	this->fetchImage();
 
@@ -35,25 +35,6 @@ MainCharacter::MainCharacter() :Object()
 
 }
 
-MainCharacter::MainCharacter(Transform & x) :Object(x)
-{
-
-	this->fetchImage();
-	//this->setCollisionParams(1, 1, 1); // collision box
-	this->current_frame_image = &down_animation[1];
-	getSoundMGR()->PlaySoundW(this->sound_number, true, 1.0f);
-}
-
-MainCharacter::MainCharacter(float x, float y, float z, float dgr, float sx, float sy, float sz) :Object(x, y, z, dgr, sx, sy, sz)
-{
-
-	this->fetchImage();
-
-	//this->setCollisionParams(1, 1, 1); // collision box
-	this->current_frame_image = &down_animation[1];
-}
-
-
 MainCharacter::~MainCharacter()
 {
 	//this->setCollisionParams(0.5, 0.5, 0.5); // collision box
@@ -61,7 +42,6 @@ MainCharacter::~MainCharacter()
 
 void MainCharacter::update()
 {
-
 	this->animate();
 	this->definedKeyAct();
 	this->prev_transform = this->transform;
@@ -81,8 +61,6 @@ void MainCharacter::update()
 	if (this->health_point <= 0) {
 		getSceneMGR()->onSceneChange(GAMEOVER);
 	}
-
-
 }
 
 
@@ -157,49 +135,57 @@ void MainCharacter::updateCollisionArea()
 
 void MainCharacter::definedKeyAct()
 {
+	constexpr static int definedKeys[2][8] = {
+		{
+			VK_RIGHT, VK_LEFT, VK_UP, VK_DOWN, VK_SPACE, VK_RETURN, VK_ESCAPE, 'P',
+		},
+		{
+			'D', 'A', 'W', 'S' , 'U'/*SPACE*/, 'I'/*RETURN*/, 'O'/*ESCAPE*/, 'T',
+		}
+	};
 
-	
 	this->timer += RP::RpTimer::getDeltaTime();
 	this->overwhelming_timer+= RP::RpTimer::getDeltaTime();
 	float Fx = 0;
 	float Fy = 0;
 	float Fz = 0;
 	float amounts = 4;
-	if (KeyIO::KeyState(VK_RIGHT)) {
+
+	if (KeyIO::KeyState(definedKeys[playerIndex][0])) {
 		Fx = amounts;
 		this->dir = RIGHT;
 	}
-	if (KeyIO::KeyState(VK_LEFT)) {
+	if (KeyIO::KeyState(definedKeys[playerIndex][1])) {
 		Fx = -amounts;
 		this->dir = LEFT;
 	}
-	if (KeyIO::KeyState(VK_UP)) {
+	if (KeyIO::KeyState(definedKeys[playerIndex][2])) {
 		Fy = amounts;
 		this->dir = UP;
 	}
-	if (KeyIO::KeyState(VK_DOWN))
+	if (KeyIO::KeyState(definedKeys[playerIndex][3]))
 	{
 		Fy = -amounts;
 		this->dir = DOWN;
 	}
-	if (KeyIO::KeyState(VK_SPACE) && timer > 0.3f)
+	if (KeyIO::KeyState(definedKeys[playerIndex][4]) && timer > 0.3f)
 	{
 		SceneManager* curScene = getSceneMGR();
 		curScene->shoot(this->dir, *this);
 		timer = 0;
 	}
 
-	if (KeyIO::KeyState(VK_RETURN))// 점프
+	if (KeyIO::KeyState(definedKeys[playerIndex][5]))// 점프
 	{
 		Fz = 30;
 	}
 
-	if (KeyIO::KeyState(VK_ESCAPE))// 종료
+	if (KeyIO::KeyState(definedKeys[playerIndex][6]))// 종료
 	{
 		exit(0);
 	}
 
-	if (KeyIO::KeyState('P'))// 무적
+	if (KeyIO::KeyState(definedKeys[playerIndex][7]))// 무적
 	{
 		std::cout << "무적 동작" << std::endl;
 		this->setHeathPoint(9999999999);
@@ -215,12 +201,23 @@ void MainCharacter::init()
 		getSceneMGR()->addObj(this->hp[i], -770+ i * 25, 450, 0.5, 1, 1, 1, 0, 0, 0, KIND_UI, 1, false );
 }
 
-MainCharacter * MainCharacter::getInstance()
+MainCharacter * MainCharacter::getInstance(int index)
 {
-	if(nullptr!=instance) return instance;
-	else instance = new MainCharacter();
-	
-	return instance;
+	if (index < 2)
+	{
+		if (instances[index])
+		{
+			return instances[index];
+		}
+		else
+		{
+			instances[index] = new MainCharacter(index);
+		}
+
+		return instances[index];
+	}
+
+	return nullptr;
 }
 
 void MainCharacter::animate()

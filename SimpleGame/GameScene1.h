@@ -5,7 +5,8 @@ class GameScene1 :
 {
 	int numOfEnemy = 10;
 
-	Object* mainchar;
+	Object* mainchars[2];
+
 	Object* back_ground;
 	Object* door;
 	Object* enemy[10];

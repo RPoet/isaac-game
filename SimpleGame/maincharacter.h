@@ -20,14 +20,14 @@ class MainCharacter :
 
 	float overwhelming_timer = 10;
 	
-	static MainCharacter* instance;
+	static MainCharacter* instances[2];
 
 	Heart* hp[10];
 
+	int playerIndex = -1;
+
 public:
-	MainCharacter();
-	MainCharacter(Transform& x);
-	MainCharacter(float x, float y, float z, float dgr, float sx, float sy, float sz);
+	MainCharacter(int playerIndex);
 	void fetchImage();
 	virtual ~MainCharacter();
 	virtual void update() override;
@@ -40,6 +40,6 @@ public:
 
 
 	virtual void init() override;
-	static MainCharacter* getInstance();
+	static MainCharacter* getInstance(int index);
 };
 

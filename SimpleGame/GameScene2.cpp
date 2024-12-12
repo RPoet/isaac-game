@@ -53,13 +53,13 @@ GameScene2::GameScene2()
 		0.f, 0.f, 0.0f, KIND_DEBUGGER_COLLISION, 1000, false, STAGE2);
 
 
-	this->enemy[1] = new Duke(this->mainchar, this);
-	this->enemy[2] = new BlackFly(this->mainchar, this);
-	this->enemy[3] = new BlackFly(this->mainchar, this);
-	this->enemy[4] = new BlackFly(this->mainchar, this);
-	this->enemy[5] = new BlackFly(this->mainchar, this);
-	this->enemy[6] = new BlackFly(this->mainchar, this);
-	this->enemy[7] = new BlackFly(this->mainchar, this);
+	this->enemy[1] = new Duke(mainchars[rand() % 2], this);
+	this->enemy[2] = new BlackFly(mainchars[rand() % 2], this);
+	this->enemy[3] = new BlackFly(mainchars[rand() % 2], this);
+	this->enemy[4] = new BlackFly(mainchars[rand() % 2], this);
+	this->enemy[5] = new BlackFly(mainchars[rand() % 2], this);
+	this->enemy[6] = new BlackFly(mainchars[rand() % 2], this);
+	this->enemy[7] = new BlackFly(mainchars[rand() % 2], this);
 }
 
 
@@ -80,56 +80,59 @@ void GameScene2::init()
 		0, 0, 0,
 		0.f, 0.f, 0.0f, KIND_BACKGROUND, 1000, false, STAGE2);
 
+	this->mainchars[0] = MainCharacter::getInstance(0);
+	this->mainchars[1] = MainCharacter::getInstance(1);
 
-	this->mainchar = MainCharacter::getInstance();
-	this->mainchar->transform.setLocation(10, -4, 0.5);
-	this->mainchar->init();
-	int hp;
-	this->mainchar->getHealthPoint(hp);
-	getSceneMGR()->addObj(this->mainchar, -0.f, -2.8, 0.5f,
-		1, 1, 1,
-		0.f, 0.f, 0.0f, KIND_HERO, hp, false, STAGE2);
-	this->setCollisionParams(0, 0, 0);
+	for (int i = 0; i < 2; ++i)
+	{
+		this->mainchars[i]->transform.setLocation(10, -4, 0.5);
+		this->mainchars[i]->init();
+
+		int hp;
+		this->mainchars[i]->getHealthPoint(hp);
+		getSceneMGR()->addObj(this->mainchars[i], -0.f, -2.8, 0.5f,
+			1, 1, 1,
+			0.f, 0.f, 0.0f, KIND_HERO, hp, false, STAGE2);
+		this->setCollisionParams(0, 0, 0);
+	}
 
 
 
-
-
-	this->enemy[0] = new Duke(this->mainchar, this);
+	this->enemy[0] = new Duke(this->mainchars[rand() %2], this);
 
 	getSceneMGR()->addObj(this->enemy[0],6, 2, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 500, false, STAGE2);
 
 
-	this->enemy[1] = new Duke(this->mainchar, this);
+	this->enemy[1] = new Duke(this->mainchars[rand() % 2], this);
 	getSceneMGR()->addObj(this->enemy[1], -6, 2, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 500, false, STAGE2);
 
-	this->enemy[2] = new BlackFly(this->mainchar, this);
+	this->enemy[2] = new BlackFly(this->mainchars[rand() % 2], this);
 	getSceneMGR()->addObj(this->enemy[2], -3, -1, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 50, false, STAGE2);
-	this->enemy[3] = new BlackFly(this->mainchar, this);
+	this->enemy[3] = new BlackFly(this->mainchars[rand() % 2], this);
 	getSceneMGR()->addObj(this->enemy[3], -3, -2, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 50, false, STAGE2);
-	this->enemy[4] = new BlackFly(this->mainchar, this);
+	this->enemy[4] = new BlackFly(this->mainchars[rand() % 2], this);
 	getSceneMGR()->addObj(this->enemy[4], 3, -3, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 50, false, STAGE2);
-	this->enemy[5] = new BlackFly(this->mainchar, this);
+	this->enemy[5] = new BlackFly(this->mainchars[rand() % 2], this);
 	getSceneMGR()->addObj(this->enemy[5], 5, -3, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 50, false, STAGE2);
 
-	this->enemy[6] = new BlackFly(this->mainchar, this);
+	this->enemy[6] = new BlackFly(this->mainchars[rand() % 2], this);
 	getSceneMGR()->addObj(this->enemy[6], 5, 3, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 50, false, STAGE2);
 
-	this->enemy[7] = new BlackFly(this->mainchar, this);
+	this->enemy[7] = new BlackFly(this->mainchars[rand() % 2], this);
 	getSceneMGR()->addObj(this->enemy[7], 3,0, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 50, false, STAGE2);
@@ -210,7 +213,8 @@ void GameScene2::onTrigger()
 
 void GameScene2::exitDo()
 {
-	this->mainchar = nullptr;
+	this->mainchars[0] = nullptr;
+	this->mainchars[1] = nullptr;
 	this->back_ground = nullptr;
 
 	getSoundMGR()->stopSounds();

@@ -13,7 +13,9 @@
 GameScene1::GameScene1()
 {
 	this->sound = getSoundMGR()->CreateSound("assets/sounds/fisrtbgm.mp3");
-	this->mainchar = MainCharacter::getInstance();
+	this->mainchars[0] = MainCharacter::getInstance(0);
+	this->mainchars[1] = MainCharacter::getInstance(1);
+
 	this->back_ground = BackGround::getInstance();
 
 
@@ -54,28 +56,30 @@ GameScene1::GameScene1()
 		0.f, 0.f, 0.0f, KIND_CLOSED_DOOR, 1000, false, STAGE1);
 
 
+	getSceneMGR()->addObj(this->mainchars[0], 0.f, -2.8f, 0.5f,
+		1, 1, 1,
+		0.f, 0.f, 0.0f, KIND_HERO, 10, false, STAGE1);
 
-
-	getSceneMGR()->addObj(this->mainchar, 0.f, -2.8f, 0.5f,
+	getSceneMGR()->addObj(this->mainchars[1], 0.f, -2.8f, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_HERO, 10, false, STAGE1);
 
 
-	this->enemy[0] = new EnemyHost(mainchar, this);
+	this->enemy[0] = new EnemyHost(mainchars[rand() % 2], this);
 
 	getSceneMGR()->addObj(this->enemy[0], 4.f, 3.f, 0.5f,
 			1, 1, 1,
 			0.f,0.f,0.0f, KIND_ENEMY,250, false, STAGE1);	
 
 
-	this->enemy[1] = new EnemyHost(mainchar, this);
+	this->enemy[1] = new EnemyHost(mainchars[rand() % 2], this);
 
 	getSceneMGR()->addObj(this->enemy[1], -4.f, 3.f, 0.5f,
 		0.7, 0.7, 0.7,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 250, false, STAGE1);
 
 
-	this->enemy[2] = new BlackFly(mainchar, this);
+	this->enemy[2] = new BlackFly(mainchars[rand() % 2], this);
 
 	getSceneMGR()->addObj(this->enemy[2], 4.f, -3.f, 0.5f,
 		1, 1, 1,
@@ -83,7 +87,7 @@ GameScene1::GameScene1()
 
 
 
-	this->enemy[3] = new BlackFly(mainchar, this);
+	this->enemy[3] = new BlackFly(mainchars[rand() % 2], this);
 
 	getSceneMGR()->addObj(this->enemy[3], 2.f, 3.f, 0.5f,
 		1, 1, 1,
@@ -91,37 +95,37 @@ GameScene1::GameScene1()
 
 
 
-	this->enemy[4] = new BlackFly(mainchar, this);
+	this->enemy[4] = new BlackFly(mainchars[rand() % 2], this);
 
 	getSceneMGR()->addObj(this->enemy[4], 3.f, 4.f, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 50, false, STAGE1);
 
-	this->enemy[5] = new BlackFly(mainchar, this);
+	this->enemy[5] = new BlackFly(mainchars[rand() % 2], this);
 
 	getSceneMGR()->addObj(this->enemy[5], 3.f, 2.f, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 50, false, STAGE1);
 
-	this->enemy[6] = new BlackFly(mainchar, this);
+	this->enemy[6] = new BlackFly(mainchars[rand() % 2], this);
 
 	getSceneMGR()->addObj(this->enemy[6], 2.f, 0, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 50, false, STAGE1);
 
-	this->enemy[7] = new BlackFly(mainchar, this);
+	this->enemy[7] = new BlackFly(mainchars[rand() % 2], this);
 
 	getSceneMGR()->addObj(this->enemy[7], 0.f,- 3.f, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 50, false, STAGE1);
 
-	this->enemy[8] = new BlackFly(mainchar, this);
+	this->enemy[8] = new BlackFly(mainchars[rand() % 2], this);
 
 	getSceneMGR()->addObj(this->enemy[8], 3.f, 2.f, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 50, false, STAGE1);
 
-	this->enemy[9] = new BlackFly(mainchar, this);
+	this->enemy[9] = new BlackFly(mainchars[rand() % 2], this);
 
 	getSceneMGR()->addObj(this->enemy[9], -3.f, -3.f, 0.5f,
 		1, 1, 1,
@@ -208,7 +212,8 @@ void GameScene1::onTrigger()
 
 void GameScene1::exitDo()
 {
-	this->mainchar = nullptr;
+	this->mainchars[0] = nullptr;
+	this->mainchars[1] = nullptr;
 	getSoundMGR()->stopSounds();
 }
 

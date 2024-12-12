@@ -32,18 +32,22 @@ void GameScene3::init()
 		0, 0, 0,
 		0.f, 0.f, 0.0f, KIND_BACKGROUND, 1000, false, STAGE3);
 
-	this->mainchar = MainCharacter::getInstance();
-
-	int hp;
-	this->mainchar->getHealthPoint(hp);
-	getSceneMGR()->addObj(this->mainchar, -6.2f, 0.2f, 0.5f,
-		1, 1, 1,
-		0.f, 0.f, 0.0f, KIND_HERO, hp, false, STAGE3);
-	this->mainchar->prev_transform.setLocation(-6.2f, 0.2f, 0.5f);
 
 
-	this->mainchar->init();
+	this->mainchars[0] = MainCharacter::getInstance(0);
+	this->mainchars[1] = MainCharacter::getInstance(1);
 
+
+	for (int i = 0; i < 2; ++i)
+	{
+		int hp;
+		this->mainchars[i]->getHealthPoint(hp);
+		getSceneMGR()->addObj(mainchars[i], -6.2f, 0.2f, 0.5f,
+			1, 1, 1,
+			0.f, 0.f, 0.0f, KIND_HERO, hp, false, STAGE3);
+		mainchars[i]->prev_transform.setLocation(-6.2f, 0.2f, 0.5f);
+		mainchars[i]->init();
+	}
 
 	getSceneMGR()->addObj(new Door(LEFT, NONE), -7.4, 0, 0.5f,
 		0.7, 1, 1,
@@ -108,27 +112,18 @@ void GameScene3::init()
 ////////////////////////////////////ENEMY///////////////////////////////////////////////////////
 
 
-
-
-
-
-
-
-
-	this->enemy[0] = new FinalBoss(this->mainchar, this);
+	this->enemy[0] = new FinalBoss(this->mainchars[ rand() % 2], this);
 
 	getSceneMGR()->addObj(this->enemy[0], -5, -3, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 700, false, STAGE3);
 
 
-	this->enemy[1] = new Duke(this->mainchar, this);
+	this->enemy[1] = new Duke(this->mainchars[rand() % 2], this);
 
 	getSceneMGR()->addObj(this->enemy[1], -2, 3, 0.5f,
 		1, 1, 1,
 		0.f, 0.f, 0.0f, KIND_ENEMY, 500, false, STAGE3);
-
-
 
 
 	getSceneMGR()->addObj(new Tile(POOP2), -5.f, 2.4f, 0.5f,
