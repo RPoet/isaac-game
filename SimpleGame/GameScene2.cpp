@@ -9,6 +9,7 @@
 #include "Duke.h"
 #include "Tile.h"
 #include "BlackFly.h"
+#include "Keyinput.h"
 GameScene2::GameScene2()
 {
 	this->sound = getSoundMGR()->CreateSound("assets/sounds/stage2.mp3");
@@ -194,6 +195,10 @@ void GameScene2::update()
 {
 	this->timer += RP::RpTimer::getDeltaTime();
 
+	if (KeyIO::KeyState('X'))
+	{
+		numOfEnemy = 0;
+	}
 
 	if (this->numOfEnemy == 0)
 	{

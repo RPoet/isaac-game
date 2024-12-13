@@ -9,6 +9,8 @@
 #include "FinalBoss.h"
 #include "Duke.h"
 #include "Tile.h"
+#include "Keyinput.h"
+
 GameScene3::GameScene3()
 {
 	this->sound = getSoundMGR()->CreateSound("assets/sounds/stage3.mp3");
@@ -171,13 +173,13 @@ void GameScene3::update()
 {
 	this->timer += RP::RpTimer::getDeltaTime();
 
+	if (KeyIO::KeyState('X'))
+	{
+		numOfEnemy = 0;
+	}
+
 	if (numOfEnemy == 0) {
 		this->door->onTrigger();
-		//this->closed_wall->onTrigger();
-
-		//this->closed_wall->onDelete();
-
-		//getSceneMGR()->onSceneChange(GAMEOVER);
 	}
 }
 

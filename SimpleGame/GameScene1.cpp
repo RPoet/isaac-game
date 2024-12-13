@@ -9,6 +9,7 @@
 #include "enemy_red.h"
 #include "BlackFly.h"
 #include "Tile.h"
+#include "Keyinput.h"
 
 GameScene1::GameScene1()
 {
@@ -197,6 +198,11 @@ void GameScene1::update()
 {
 	this->timer += RP::RpTimer::getDeltaTime();
 
+
+	if (KeyIO::KeyState('X'))
+	{
+		numOfEnemy = 0;
+	}
 
 	if (numOfEnemy == 0) this->door->onTrigger();
 }
