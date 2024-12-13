@@ -13,13 +13,7 @@ class Transform;
 
 class Object
 {
-
-
 	float colorR, colorG, colorB, colorA = 1;
-
-
-
-
 
 	float forceX=0;
 	float forceY=0;
@@ -126,23 +120,26 @@ public:
 		this->accY = y;
 		this->accZ = z;
 	}
+
 	inline void getAccelation(float &x, float& y, float &z) {
 		x = this->accX;
 		y = this->accY;
 		z = this->accZ;
 	}
+
 	void setColor(float r, float g, float b, float a) {
-		this->colorA = a;
-		this->colorB = b;
-		this->colorG = g;
-		this->colorR = r;
+		colorA = a;
+		colorB = b;
+		colorG = g;
+		colorR = r;
 	}
+
 	void getColor(float& r, float& g, float& b, float& a)
 	{
-		r = this->colorR;
-		g = this->colorG;
-		b = this->colorB;
-		a = this->colorA;
+		r = colorR;
+		g = colorG;
+		b = colorB;
+		a = colorA;
 	}
 
 	void setRoughness(float rhs) { this->roughness = rhs; }

@@ -7,9 +7,6 @@ class Object;
 
 class SceneManager
 {
-
-
-
 	Renderer* renderer;
 	GLuint  back_ground_texture;
 	GLuint  main_char_texture;

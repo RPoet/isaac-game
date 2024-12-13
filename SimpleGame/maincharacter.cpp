@@ -22,22 +22,25 @@ int MainCharacter::sound_hit;
 bool MainCharacter::image = false;
 MainCharacter* MainCharacter::instances[2] = { nullptr, nullptr };
 
-MainCharacter::MainCharacter(int playerIndex) : Object() , playerIndex(playerIndex)
+MainCharacter::MainCharacter(int playerIndex)
+	: Object()
+	, playerIndex(playerIndex)
 {
-	if(!MainCharacter::image)	this->fetchImage();
-
-	//this->setCollisionParams(1, 1, 1); // collision box
-	this->current_frame_image = &down_animation[1];
-	//getSoundMGR()->PlaySoundW(this->sound_number, true, 1.0f);
-	for (int i = 0; i < 10; ++i) {
-		this->hp[i] = new Heart();
+	if (!MainCharacter::image)
+	{
+		fetchImage();
 	}
 
+	current_frame_image = &down_animation[1];
+	
+	for (int i = 0; i < 10; ++i)
+	{
+		hp[i] = new Heart();
+	}
 }
 
 MainCharacter::~MainCharacter()
 {
-	//this->setCollisionParams(0.5, 0.5, 0.5); // collision box
 }
 
 void MainCharacter::update()
@@ -50,15 +53,15 @@ void MainCharacter::update()
 
 
 	for (int i = 0; i < 10; ++i) {
-		this->hp[i]->heal();
+		hp[i]->heal();
 	}
-	if (this->health_point < 10) {
+	if (health_point < 10) {
 		for (int i = this->health_point; i < 10; ++i) {
 			this->hp[i]->modifyHeart();
 		}
 	}
 
-	if (this->health_point <= 0) {
+	if (health_point <= 0) {
 		getSceneMGR()->onSceneChange(GAMEOVER);
 	}
 }
@@ -71,7 +74,6 @@ void MainCharacter::onCollision(Object* other)
 		//cout << "col with building" << endl;
 	}
 
-
 	if (other->getTag() == KIND_ENEMY) {
 		if (this->overwhelming_timer > 1.0f) {
 			float x, y, z;
@@ -81,7 +83,6 @@ void MainCharacter::onCollision(Object* other)
 			getSceneMGR()->addObj(new Explosion2(), x, y, z, 1, 1, 1, 0, 0, 0, KIND_EFFECT, 1, false);
 			this->health_point--;
 		}
-
 	}
 
 	if (other->getTag() == KIND_ENEMY_BULLET) {
@@ -96,7 +97,6 @@ void MainCharacter::onCollision(Object* other)
 
 	}
 
-
 	if (other->getTag() == KIND_CLOSED_DOOR) {
 		float x, y, z;
 		other->transform.getTransform(x, y, z);
@@ -104,10 +104,6 @@ void MainCharacter::onCollision(Object* other)
 		this->transform = this->prev_transform;
 		this->setVelocityZeroXY();
 	}
-
-
-
-
 
 	Object::onCollision(other);
 }
@@ -170,8 +166,11 @@ void MainCharacter::definedKeyAct()
 	}
 	if (KeyIO::KeyState(definedKeys[playerIndex][4]) && timer > 0.3f)
 	{
-		SceneManager* curScene = getSceneMGR();
-		curScene->shoot(this->dir, *this);
+		SceneManager* curScene = getSceneMGR();		
+		if (curScene)
+		{
+			curScene->shoot(this->dir, *this);
+		}	
 		timer = 0;
 	}
 
@@ -188,8 +187,16 @@ void MainCharacter::definedKeyAct()
 	if (KeyIO::KeyState(definedKeys[playerIndex][7]))// 公利
 	{
 		std::cout << "公利 悼累" << std::endl;
-		this->setHeathPoint(9999999999);
-		this->setColor(1, 0, 0, 1);
+		setHeathPoint(9999999999);
+
+		if (playerIndex != 0)
+		{
+			setColor(1, 1, 0, 1);
+		}
+		else
+		{
+			setColor(0, 1, 1, 1);
+		}
 	}
 
 	this->addForce(Fx, Fy, Fz);	
@@ -198,7 +205,17 @@ void MainCharacter::definedKeyAct()
 void MainCharacter::init()
 {
 	for (int i = 0; i < 10; ++i)
-		getSceneMGR()->addObj(this->hp[i], -770+ i * 25, 450, 0.5, 1, 1, 1, 0, 0, 0, KIND_UI, 1, false );
+		getSceneMGR()->addObj(this->hp[i], -770+ i * 25, 450 - ( this->playerIndex * 900 ), 0.5, 1, 1, 1, 0, 0, 0, KIND_UI, 1, false);
+
+
+	if (playerIndex != 0)
+	{
+		setColor(1, 0, 0, 1);
+	}
+	else
+	{
+		setColor(1, 1, 1, 1);
+	}
 }
 
 MainCharacter * MainCharacter::getInstance(int index)

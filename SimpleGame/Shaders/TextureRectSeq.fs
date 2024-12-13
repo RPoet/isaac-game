@@ -18,7 +18,7 @@ void main()
 	newTexPos.x = u_CurrSeqX/u_TotalSeqX + newTexPos.x/u_TotalSeqX;
 	newTexPos.y = u_CurrSeqY/u_TotalSeqY + newTexPos.y/u_TotalSeqY;
 
-	FragColor = texture2D(u_Texture, newTexPos);
+	FragColor = texture2D(u_Texture, newTexPos) * vec4(u_Color.xyz, 1);
 
     if(abs(FragColor.a) < 0.00001)
         gl_FragDepth = 1.0;

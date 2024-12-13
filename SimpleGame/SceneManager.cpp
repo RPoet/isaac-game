@@ -110,29 +110,29 @@ void SceneManager::renderScene()
 
 	//CST::kMaxObj
 	for (int i = 0; i < CST::kMaxObj; ++i) {
-		if (nullptr != this->poolOfObjects[SceneManager::current_scene_number][i]) {
-
-			/////////////////////////
+		if (poolOfObjects[SceneManager::current_scene_number][i])
+		{
 			float x, y, z, dgr, sx, sy, sz, r, g, b, a;
 			float newX, newY, newZ, newW, newH;
 
-			this->poolOfObjects[SceneManager::current_scene_number][i]->transform.getTransform(x, y, z);
-			this->poolOfObjects[SceneManager::current_scene_number][i]->transform.getDegree(dgr);
-			this->poolOfObjects[SceneManager::current_scene_number][i]->transform.getScale(sx, sy, sz);
-			this->poolOfObjects[SceneManager::current_scene_number][i]->getColor(r, g, b, a);
+			poolOfObjects[SceneManager::current_scene_number][i]->transform.getTransform(x, y, z);
+			poolOfObjects[SceneManager::current_scene_number][i]->transform.getDegree(dgr);
+			poolOfObjects[SceneManager::current_scene_number][i]->transform.getScale(sx, sy, sz);
+
+			poolOfObjects[SceneManager::current_scene_number][i]->getColor(r, g, b, a);
+
 			newX = x * 100.0f;
 			newY = y * 100.0f;
 			newZ = z * 100.0f;
 
 			newW = sx * 100.0f; // 1당 화면의 1미터로 잡고 거기에 100픽셀을 곱해준격.
 			newH = sy * 100.0f;
-			///////////////////////// 
 
-			switch (this->poolOfObjects[this->current_scene_number][i]->getTag()) {
+			switch (poolOfObjects[current_scene_number][i]->getTag()) {
 			case KIND_BILLBOARD:
-				this->renderer->DrawTextureRect(0, 0, 0,
-					sx, sy,			//백그라운드는 사이즈 그대로 그려주면 된다.
-					r, g, b, a, *this->poolOfObjects[SceneManager::current_scene_number][i]->getCurrentFrameImage());
+				renderer->DrawTextureRect(0, 0, 0,
+					sx, sy,
+					r, g, b, a, *poolOfObjects[SceneManager::current_scene_number][i]->getCurrentFrameImage());
 
 				break;
 			case KIND_PENETRATING_TILE:
@@ -145,100 +145,66 @@ void SceneManager::renderScene()
 			case KIND_CLOSED_DOOR:
 			case KIND_ENEMY_BULLET:
 			case KIND_ITEM:
-				this->renderer->DrawTextureRectHeight(newX, newY - newH/1.45, 0.5,
-					newW  * 0.75, newH * 0.75,										//그리는 케릭터의 사이즈에 알맞게 축소되고 커지고 한다.
+
+				renderer->DrawTextureRectHeight(newX, newY - newH/1.45, 0.5,
+					newW  * 0.75, newH * 0.75,
 					r, g, b, a,
-					this->shadow,
+					shadow,
 					newZ);
-				this->renderer->DrawTextureRectSeqXYHeight(newX, newY - newH / 1.45, 0.5,
+
+				renderer->DrawTextureRectSeqXYHeight(newX, newY - newH / 1.45, 0.5,
 					newW  *2 , newH  * 2,
 					r, g, b, a,
-					*this->poolOfObjects[SceneManager::current_scene_number][i]->getCurrentFrameImage(),0,0,
+					*poolOfObjects[SceneManager::current_scene_number][i]->getCurrentFrameImage(), 0, 0,
 					1,1,
 					newZ-40);
-
 				break;
 			case KIND_UI:
-				this->renderer->DrawTextureRectDepth(x, y, z,
+				renderer->DrawTextureRectDepth(x, y, z,
 					sx*25, sy*25,
 					1, 1, 1, 1,
-					*this->poolOfObjects[SceneManager::current_scene_number][i]->getCurrentFrameImage(),
+					*poolOfObjects[SceneManager::current_scene_number][i]->getCurrentFrameImage(),
 					-1);
 				break;
 
 			case KIND_BACKGROUND:
-				this->renderer->DrawTextureRectDepth(0, 0, -100,
+				renderer->DrawTextureRectDepth(0, 0, -100,
 					sx, sy,
 					1, 1, 1, 1,
-					*this->poolOfObjects[SceneManager::current_scene_number][i]->getCurrentFrameImage(),
+					*poolOfObjects[SceneManager::current_scene_number][i]->getCurrentFrameImage(),
 					100.0f);
-				this->renderer->DrawTextureRectDepth(0, 0, -100,
+				renderer->DrawTextureRectDepth(0, 0, -100,
 					sx, sy,
 					1, 1, 1, 1,
-					this->shading_room_texture,
+					shading_room_texture,
 					99.9f);
 				break;
 
 			case KIND_DEBUGGER_COLLISION:
-				//this->renderer->DrawSolidRect(newX, newY, 0,
-				//	sx, sy,			//백그라운드는 사이즈 그대로 그려주면 된다.
-				//	1, 0,0, 1);
-
 				break;
 
 			}
 
-			switch (this->current_scene_number) {
+			switch (current_scene_number) {
 			case STAGE2:
-				this->renderer->DrawParticleClimate(0, 0, 0,
+				renderer->DrawParticleClimate(0, 0, 0,
 					5,//파티클 사이즈
 					1, 1, 1, 1,
 					sinf(RP::RpTimer::getPlayTime()), cosf(RP::RpTimer::getPlayTime()),		//파티클의 방향
-					this->snow_texture,
+					snow_texture,
 					0.3f,  // 파티클에 대한 비율
 					RP::RpTimer::getPlayTime());
 				break;
 			case STAGE3:
-				this->renderer->DrawParticleClimate(0, 0, 0,
+				renderer->DrawParticleClimate(0, 0, 0,
 					5,//파티클 사이즈
 					1, 1, 1, 1,
 					sinf(RP::RpTimer::getPlayTime()), cosf(RP::RpTimer::getPlayTime()),		//파티클의 방향
-					this->snow_texture,
+					snow_texture,
 					1.f,  // 파티클에 대한 비율
 					RP::RpTimer::getPlayTime());
 				break;
 			}
-
-			//
-			//this->renderer->DrawTextureRectHeight(newX, newY - newH/1.45, 0.5,
-			//	newW  * 1, newH * 1,
-			//	r, g, b, a,
-			//	*this->poolOfObjects[SceneManager::current_scene_number][i]->getCurrentFrameImage(),
-			//	newZ
-			//);
-
-
-			//this->renderer->DrawSolidRectGauge(newX, newY - newH / 1.45, 0.5,
-			//	newW / 100 * 50, newH / 100 * 25,
-			//	r, g, b, a,
-			//	newZ,
-			//	0.5f // 게이지 차있는 계수
-			//);
-
-			//this->renderer->DrawTextureRectSeqXYHeight(newX, newY - newH / 1.45, 0.5,
-			//	newW  * 2, newH  *2,
-			//	r, g, b, a,
-			//	*this->poolOfObjects[SceneManager::current_scene_number][i]->getCurrentFrameImage(),0,0,
-			//	1,1,
-			//	newZ-15);
-
-			//this->renderer->DrawParticleClimate(0, 0, 0, 
-			//	5,//파티클 사이즈
-			//	1, 1, 1, 1,
-			//	sinf(RP::RpTimer::getPlayTime()), cosf(RP::RpTimer::getPlayTime()),		//파티클의 방향
-			//	this->snow_texture,
-			//	1.f,  // 파티클에 대한 비율
-			//	RP::RpTimer::getPlayTime());
 		}
 	}
 
@@ -249,22 +215,22 @@ void SceneManager::update()
 	KeyIO::update();
 	
 	for (int i = 0; i < CST::kMaxObj; ++i) {
-		if (nullptr != this->poolOfObjects[SceneManager::current_scene_number][i]) {
-			this->poolOfObjects[SceneManager::current_scene_number][i]->update();
-			
+		if (poolOfObjects[SceneManager::current_scene_number][i])
+		{
+			poolOfObjects[SceneManager::current_scene_number][i]->update();	
 		}
 	}	
-	this->processCollision();
-	this->garbageCollector();
+	processCollision();
+	garbageCollector();
 }
 
 void SceneManager::doCollisionTest()
 {
 	for (int i = 0; i < CST::kMaxObj; ++i) {
-		if (nullptr != this->poolOfObjects[SceneManager::current_scene_number][i]) {
+		if (poolOfObjects[SceneManager::current_scene_number][i]) {
 			for (int j = i + 1; j < CST::kMaxObj; ++j) {
-				if (nullptr != this->poolOfObjects[SceneManager::current_scene_number][j]) {
-					if (this->collide(this->poolOfObjects[SceneManager::current_scene_number][i]->getArea(), this->poolOfObjects[SceneManager::current_scene_number][j]->getArea())) {
+				if (poolOfObjects[SceneManager::current_scene_number][j]) {
+					if (collide(this->poolOfObjects[SceneManager::current_scene_number][i]->getArea(), this->poolOfObjects[SceneManager::current_scene_number][j]->getArea())) {
 						poolOfObjects[SceneManager::current_scene_number][j]->setColor(0, 0, 0, 1);
 					}
 				}
@@ -276,30 +242,22 @@ void SceneManager::doCollisionTest()
 void SceneManager::processCollision()
 {
 	for (int i = 0; i < CST::kMaxObj-1; ++i) {
-		if (nullptr != this->poolOfObjects[SceneManager::current_scene_number][i]) {
+		if (poolOfObjects[SceneManager::current_scene_number][i]) {
 			int col = 0;
 			for (int j = i + 1; j < CST::kMaxObj; ++j) {
-				if (nullptr != this->poolOfObjects[SceneManager::current_scene_number][j]) {
+				if (poolOfObjects[SceneManager::current_scene_number][j]) {
 
 					if (this->collide(this->poolOfObjects[SceneManager::current_scene_number][i]->getAreaBox(), this->poolOfObjects[SceneManager::current_scene_number][j]->getAreaBox())) {
 						if (poolOfObjects[SceneManager::current_scene_number][i]->getTag() != poolOfObjects[SceneManager::current_scene_number][j]->getTag()) {
 
-						
-							//std::cout << debug << std::endl;
-
 							poolOfObjects[this->current_scene_number][i]->onCollision(this->poolOfObjects[this->current_scene_number][j]);
-							//if (poolOfObjects[SceneManager::current_scene_number][j]->getTag() == KIND_OPEN_DOOR) break;
 							poolOfObjects[this->current_scene_number][j]->onCollision(this->poolOfObjects[this->current_scene_number][i]);
-							
-							
+												
 							col++;
 						}
 					}
 				}
 			}
-
-			//if (col > 0) poolOfObjects[SceneManager::current_scene_number][i]->setColor(1, 0, 0, 1);
-			//else poolOfObjects[SceneManager::current_scene_number][i]->setColor(1, 1, 1, 1);
 		}
 	}
 }
